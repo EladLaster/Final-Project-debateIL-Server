@@ -1,0 +1,35 @@
+module.exports = (sequelize, DataTypes) => {
+  const Debate = sequelize.define('Debate', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    topic: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    start_time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    end_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.ENUM('scheduled', 'live', 'finished'),
+      defaultValue: 'scheduled',
+      allowNull: false
+    }
+  }, {
+    timestamps: true
+  });
+
+  Debate.associate = models => {
+    Debate.hasMany(models.Argument, { foreignKey: 'debate_id', as: 'arguments' });
+  };
+
+  return Debate;
+};
