@@ -36,21 +36,25 @@ async function createDebate(req, res, next) {
   }
 }
 
-async function updateRecipe(req, res, next) {
+async function updateDebate(req, res, next) {
   try {
-    const updated = await Recipe.updateRecipe(req.params.id, req.body,req.user.id);
-    if (!updated) return res.status(404).json({ success: false, message: 'Recipe not found' });
-    res.status(200).json({ success: true, recipe: updated });
+    //send a prop : ,req.user.id
+    const updated = await Debate.updateDebate(req.params.id, req.body);
+    if (!updated) 
+      return res.status(404).json({ success: false, message: 'debate not found' });
+    res.status(200).json({ success: true, updated });
   } catch (err) {
     next(err);
   }
 }
 
-async function deleteRecipe(req, res, next) {
+async function deleteDebate(req, res, next) {
   try {
-    const deleted = await Recipe.deleteRecipe(req.params.id,req.user.id);
-    if (!deleted) return res.status(404).json({ success: false, message: 'Recipe not found' });
-    res.status(200).json({ success: true, message: 'Recipe deleted' });
+    //send a prop : ,req.user.id
+    const deleted = await Debate.deleteDebate(req.params.id);
+    if (!deleted) 
+      return res.status(404).json({ success: false, message: 'debate not found' });
+    res.status(200).json({ success: true, message: 'debate deleted' });
   } catch (err) {
     next(err);
   }
@@ -65,4 +69,4 @@ async function getStats(req, res, next) {
   }
 }
 
-module.exports = { getDebates, getDebate, createDebate, updateRecipe, deleteRecipe, getStats };
+module.exports = { getDebates, getDebate, createDebate, updateDebate, deleteDebate, getStats };

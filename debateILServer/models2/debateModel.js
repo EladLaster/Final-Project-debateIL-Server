@@ -51,7 +51,7 @@ async function getDebateById(id) {
 
 //send a prop: , userId
 async function createDebate(data) {
-  
+
   const newDebate= await Debate.create({
   ...data
 });
@@ -63,49 +63,36 @@ async function createDebate(data) {
   return newDebate.toJSON();
 }
 
-async function updateRecipe(id, data,userId) {
-  // const recipes = await readRecipes();
-  // const index = recipes.findIndex(r => r.id === id);
-  // if (index === -1) return null;
-  // const updated = { ...recipes[index], ...data, id, createdAt: recipes[index].createdAt };
-  // recipes[index] = updated;
-  // await writeRecipes(recipes);
+//send a prop: , userId
+async function updateDebate(id, data) {
 
-  const recipe = await Recipe.findAll({where : {id}});
+  const debate = await Debate.findAll({where : {id}});
 
-  if (recipe.length === 0) return null;
+  if (debate.length === 0)
+     return null;
 
-  if (recipe[0].userId !== userId) {
-    throw new Error("You are not authorized to update this recipe");
-  }
+  // if (debate[0].userId !== userId) {
+  //   throw new Error("You are not authorized to update this debate");
+  // }
 
-  const updated = await recipe[0].update(data);
+  const updated = await debate[0].update(data);
 
-  return {
-    ...updated.toJSON(),
-    userId,
-    ingredients: JSON.parse(updated.ingredients || '[]'),
-    instructions: JSON.parse(updated.instructions || '[]')
-  };
-  // return updated;
+  return updated.toJSON();
 }
 
-async function deleteRecipe(id,userId) {
-  // const recipes = await readRecipes();
-  // const index = recipes.findIndex(r => r.id === id);
-  // if (index === -1) return false;
-  // recipes.splice(index, 1);
-  // await writeRecipes(recipes);
+//send a prop: , userId
+async function deleteDebate(id) {
 
-  const recipe = await Recipe.findAll({where:{id}});
+  const debate = await Debate.findAll({where:{id}});
 
-  if(recipe.length === 0) return null;
+  if(debate.length === 0)
+     return null;
 
-  if (recipe[0].userId !== userId) {
-    throw new Error("You are not authorized to delete this recipe");
-  }
+  // if (debate[0].userId !== userId) {
+  //   throw new Error("You are not authorized to delete this debate");
+  // }
 
-  await recipe[0].destroy();
+  await debate[0].destroy();
 
   return true;
 }
@@ -141,7 +128,7 @@ module.exports = {
   getAllDebates,
   getDebateById,
   createDebate,
-  updateRecipe,
-  deleteRecipe,
+  updateDebate,
+  deleteDebate,
   getStats
 };
