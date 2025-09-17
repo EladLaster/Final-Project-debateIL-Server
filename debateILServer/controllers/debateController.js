@@ -26,10 +26,11 @@ async function getDebate(req, res, next) {
   }
 }
 
-async function createRecipe(req, res, next) {
+async function createDebate(req, res, next) {
   try {
-    const newRecipe = await Recipe.createRecipe(req.body,req.user.id);
-    res.status(201).json({ success: true, recipe: newRecipe });
+    //send a prop : ,req.user.id
+    const newDebate = await Debate.createDebate(req.body);
+    res.status(201).json({ success: true, newDebate });
   } catch (err) {
     next(err);
   }
@@ -64,4 +65,4 @@ async function getStats(req, res, next) {
   }
 }
 
-module.exports = { getDebates, getDebate, createRecipe, updateRecipe, deleteRecipe, getStats };
+module.exports = { getDebates, getDebate, createDebate, updateRecipe, deleteRecipe, getStats };

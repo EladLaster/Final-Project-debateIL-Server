@@ -46,36 +46,21 @@ async function getDebateById(id) {
   if (debate.length === 0)
     return null;
 
-  return {
-    ...debate[0].toJSON(),
-    ingredients: JSON.parse(debate[0].ingredients || '[]'),
-    instructions: JSON.parse(debate[0].instructions || '[]')
-  };
+  return debate[0].toJSON();
 }
 
-async function createRecipe(data, userId) {
-  // const recipes = await readRecipes();
-  // const newRecipe = { id: uuidv4(),...data, createdAt: new Date().toISOString() };
-  // recipes.push(newRecipe);
-  // await writeRecipes(recipes);
-
-  const newRecipe = await Recipe.create({
-  id: uuidv4(),
-  ...data,
-  userId,
-  ingredients: JSON.stringify(data.ingredients || []),
-  instructions: JSON.stringify(data.instructions || [])
+//send a prop: , userId
+async function createDebate(data) {
+  
+  const newDebate= await Debate.create({
+  ...data
 });
 
-  if (!newRecipe) {
+  if (!newDebate) {
     throw new Error("Failed to create recipe");
   }
 
-  return {
-    ...newRecipe.toJSON(),
-    ingredients: JSON.parse(newRecipe.ingredients || '[]'),
-    instructions: JSON.parse(newRecipe.instructions || '[]')
-  };
+  return newDebate.toJSON();
 }
 
 async function updateRecipe(id, data,userId) {
@@ -155,7 +140,7 @@ async function getStats() {
 module.exports = {
   getAllDebates,
   getDebateById,
-  createRecipe,
+  createDebate,
   updateRecipe,
   deleteRecipe,
   getStats

@@ -5,12 +5,13 @@ const debateController = require('../controllers/debateController');
 const authMiddleware = require('../middlewares/authentication');
 const checkRecipeOwnership = require('../middlewares/recipeOwnership');
 
-// send in prep: authMiddleware,
+// send in prep: authMiddleware for all of the functions
+
 debateRoute.get('/', debateController.getDebates);
 // recipeRoute.get('/stats', recipeController.getStats);
 debateRoute.get('/:id', debateController.getDebate);
 
-// recipeRoute.post('/',authMiddleware,validation, recipeController.createRecipe);
+debateRoute.post('/',validation, debateController.createDebate);
 // recipeRoute.put('/:id',authMiddleware,checkRecipeOwnership, recipeController.updateRecipe);
 // recipeRoute.delete('/:id',authMiddleware,checkRecipeOwnership, recipeController.deleteRecipe);
 
