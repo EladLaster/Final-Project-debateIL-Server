@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const db = require('../models');
-const { Debate, User, UserFavorites } = db;
+const { Debate } = db;
 
 // get a prop : filters = {},userId
 async function getAllDebates() {

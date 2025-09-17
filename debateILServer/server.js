@@ -7,7 +7,7 @@ const morgan = require("morgan");
 const { errorHandling } = require("./middlewares/errorHandling");
 const debateRoute = require("./routes/debateRoute");
 const userRoute = require("./routes/userRoute");
-const userFavoriteRoute = require("./routes/userFavoriteRoute");
+// const userFavoriteRoute = require("./routes/userFavoriteRoute");
 const app = express();
 
 app.use(express.json());
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', userRoute)
 
-app.use('/api/users/favorites', userFavoriteRoute);
+// app.use('/api/users/favorites', userFavoriteRoute);
 
 app.use('/api/debates', debateRoute);
 
