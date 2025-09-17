@@ -62,7 +62,7 @@ async function deleteDebate(req, res, next) {
 
 async function getStats(req, res, next) {
   try {
-    const stats = await Recipe.getStats();
+    const stats = await Debate.getStats();
     res.status(200).json({ success: true, ...stats });
   } catch (err) {
     next(err);

@@ -9,7 +9,7 @@ const checkRecipeOwnership = require('../middlewares/recipeOwnership');
 //send a prop : checkRecipeOwnership for put and delete
 
 debateRoute.get('/', debateController.getDebates);
-// recipeRoute.get('/stats', recipeController.getStats);
+debateRoute.get('/stats', debateController.getStats);
 debateRoute.get('/:id', debateController.getDebate);
 
 debateRoute.post('/',validation, debateController.createDebate);

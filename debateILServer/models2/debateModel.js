@@ -98,30 +98,26 @@ async function deleteDebate(id) {
 }
 
 async function getStats() {
-  // const recipesJSON = await readRecipes();
 
-  const recipes = await Recipe.findAll();
+  const debates = await Debate.findAll();
 
-   const recipesJSON = recipes.map(r => ({
-    ...r.toJSON(),
-    ingredients: JSON.parse(r.ingredients || '[]'),
-    instructions: JSON.parse(r.instructions || '[]')
-  }));
+   const debatesJSON = debates.map(d =>d.toJSON());
 
-  const totalNumOfRecipes = recipesJSON.length;
-  const averageCookingTime = (recipesJSON.reduce((sum, r) => sum + r.cookingTime, 0) / (totalNumOfRecipes || 1)).toFixed(2);
+  const totalNumOfDebates = debatesJSON.length;
+  // const averageCookingTime = (debatesJSON.reduce((sum, r) => sum + r.cookingTime, 0) / (totalNumOfRecipes || 1)).toFixed(2);
 
-  const recipesByDifficulty = recipesJSON.reduce((acc, r) => {
-    const level = r.difficulty.toLowerCase();
-    acc[level] = (acc[level] || 0) + 1;
-    return acc;
-  }, {});
+  // const debatesByDifficulty = debatesJSON.reduce((acc, r) => {
+  //   const level = r.difficulty.toLowerCase();
+  //   acc[level] = (acc[level] || 0) + 1;
+  //   return acc;
+  // }, {});
 
-  const ingredientCount = {};
-  recipesJSON.forEach(r => r.ingredients.forEach(ing => ingredientCount[ing] = (ingredientCount[ing] || 0) + 1));
-  const mostCommonIngredients = Object.entries(ingredientCount).sort((a,b) => b[1]-a[1]).map(e => e[0]);
+  // const ingredientCount = {};
+  // debatesJSON.forEach(r => r.ingredients.forEach(ing => ingredientCount[ing] = (ingredientCount[ing] || 0) + 1));
+  // const mostCommonIngredients = Object.entries(ingredientCount).sort((a,b) => b[1]-a[1]).map(e => e[0]);
 
-  return { totalNumOfRecipes, averageCookingTime, recipesByDifficulty, mostCommonIngredients };
+  //send a prop: averageCookingTime, recipesByDifficulty, mostCommonIngredients 
+  return {totalNumOfDebates};
 }
 
 module.exports = {
