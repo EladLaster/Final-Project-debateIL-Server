@@ -22,7 +22,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('scheduled', 'live', 'finished'),
       defaultValue: 'scheduled',
       allowNull: false
-    }
+    },
+    user1_id: { type: DataTypes.UUID, allowNull: true },
+    user2_id: { type: DataTypes.UUID, allowNull: true },
+    score_user1: { type: DataTypes.INTEGER, allowNull: true, defaultValue:0 },
+    score_user2: { type: DataTypes.INTEGER, allowNull: true, defaultValue:0 }
+}, {
   }, {
     timestamps: true
   });
