@@ -8,7 +8,7 @@ const authMiddleware = require('../middlewares/authentication');
 const checkRecipeOwnership = require('../middlewares/recipeOwnership');
 
 // send in prep: authMiddleware for all of the functions
-//send a prop : checkRecipeOwnership for put and delete
+// send a prop : checkRecipeOwnership for put and delete
 
 debateRoute.get('/', debateController.getDebates);
 debateRoute.get('/stats', debateController.getStats);
@@ -18,7 +18,7 @@ debateRoute.post('/',validation, debateController.createDebate);
 debateRoute.put('/:id', debateController.updateDebate);
 debateRoute.delete('/:id', debateController.deleteDebate);
 
-debateRoute.post('/:id/arguments', argumentController.createArgument);
+debateRoute.post('/:id/arguments', authMiddleware,argumentController.createArgument);
 debateRoute.get('/:id/arguments', argumentController.getArguments);
 
 debateRoute.patch('/:id/vote/user1', voteController.voteUser1);
