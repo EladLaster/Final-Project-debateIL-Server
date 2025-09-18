@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 
 const PORT = process.env.PORT;
 
@@ -11,6 +12,7 @@ const userRoute = require("./routes/userRoute");
 const app = express();
 
 app.use(express.json());
+app.use(cors({ origin: ['http://localhost:5173', 'http://127.0.0.1:5173'] }));
 
 morgan.token("date", () => new Date().toISOString());
 app.use(morgan(":method :url :status :response-time ms - :date"));
