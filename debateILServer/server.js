@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", userRoute);
+app.use("/api/users", userRoute);
 
 // app.use('/api/users/favorites', userFavoriteRoute);
 
