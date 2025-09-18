@@ -8,7 +8,7 @@ const authMiddleware = require("../middlewares/authentication");
 const checkRecipeOwnership = require("../middlewares/recipeOwnership");
 
 // send in prep: authMiddleware for all of the functions
-//send a prop : checkRecipeOwnership for put and delete
+// send a prop : checkRecipeOwnership for put and delete
 
 debateRoute.get("/", debateController.getDebates);
 debateRoute.get("/stats", debateController.getStats);
