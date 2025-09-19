@@ -33,7 +33,7 @@ async function login(req, res, next) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: false,
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
     });

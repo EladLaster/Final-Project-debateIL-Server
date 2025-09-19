@@ -10,7 +10,9 @@ const checkRecipeOwnership = require("../middlewares/recipeOwnership");
 // send in prep: authMiddleware for all of the functions
 // send a prop : checkRecipeOwnership for put and delete
 
-debateRoute.get("/", debateController.getDebates);
+
+// אם זה לא עובד תורידו את הauthmidleware!!!!!!
+debateRoute.get("/", authMiddleware, debateController.getDebates);
 debateRoute.get("/stats", debateController.getStats);
 debateRoute.get("/:id", debateController.getDebate);
 
