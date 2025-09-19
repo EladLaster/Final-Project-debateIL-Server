@@ -30,7 +30,8 @@ async function loginUser(email, password) {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName
-    }
+    },
+    token
   };
 }
 
