@@ -1,5 +1,6 @@
 const { getAllUsers } = require("../models2/userModel");
 const Auth = require("../models2/userModel");
+require('dotenv').config();
 
 async function getUsers(req, res, next) {
   try {
@@ -14,24 +15,39 @@ async function getUsers(req, res, next) {
 async function login(req, res, next) {
   try {
     const { email, password } = req.body;
-    if (!email || !password)
-      return res
-        .status(400)
-        .json({ success: false, message: "Email and password are required" });
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
 
     const result = await Auth.loginUser(email, password);
-    if (!result)
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid email or password" });
+    if (!result) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
 
-    res
-      .status(200)
-      .json({ success: true, message: "Login successful", ...result });
+    res.cookie("token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 24h
+      path: "/",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: result.user,
+    });
   } catch (err) {
     next(err);
   }
 }
+
 
 async function register(req, res, next) {
   try {

@@ -21,7 +21,7 @@ async function loginUser(email, password) {
 
   const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
 
-  console.log(JWT_SECRET);
+  // console.log(JWT_SECRET);
   
   return {
     user: {
@@ -30,8 +30,7 @@ async function loginUser(email, password) {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName
-    },
-    token
+    }
   };
 }
 
