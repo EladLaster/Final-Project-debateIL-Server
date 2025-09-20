@@ -6,10 +6,14 @@ async function createArgument(req, res, next) {
     const userId = req.user.id;
     const { text } = req.body;
 
+    // Check if user is a participant in this debate
     const newArgument = await ArgumentModel.createArgument(debateId, userId, { text });
 
     if (!newArgument)
       return res.status(404).json({ success: false, message: 'Debate not found' });
+
+    if (newArgument === 'unauthorized')
+      return res.status(403).json({ success: false, message: 'Only debate participants can add arguments' });
 
     res.status(201).json({ success: true, argument: newArgument });
   } catch (err) {
