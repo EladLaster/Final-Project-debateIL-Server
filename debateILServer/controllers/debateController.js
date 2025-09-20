@@ -1,13 +1,14 @@
-const Debate = require('../models2/debateModel');
-
+const Debate = require("../models2/debateModel");
 
 async function getDebates(req, res, next) {
   try {
     //send a prop: req.query,req.user.id
     const debates = await Debate.getAllDebates();
-    
+
     if (!debates.length)
-      return res.status(404).json({ success: false, message: 'No debates found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "No debates found" });
     res.status(200).json({ success: true, debates });
   } catch (err) {
     next(err);
@@ -16,10 +17,11 @@ async function getDebates(req, res, next) {
 
 async function getDebate(req, res, next) {
   try {
-
     const debate = await Debate.getDebateById(req.params.id);
     if (!debate)
-      return res.status(404).json({ success: false, message: 'debate not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "debate not found" });
     res.status(200).json({ success: true, debate });
   } catch (err) {
     next(err);
@@ -40,8 +42,10 @@ async function updateDebate(req, res, next) {
   try {
     //send a prop : ,req.user.id
     const updated = await Debate.updateDebate(req.params.id, req.body);
-    if (!updated) 
-      return res.status(404).json({ success: false, message: 'debate not found' });
+    if (!updated)
+      return res
+        .status(404)
+        .json({ success: false, message: "debate not found" });
     res.status(200).json({ success: true, updated });
   } catch (err) {
     next(err);
@@ -52,9 +56,48 @@ async function deleteDebate(req, res, next) {
   try {
     //send a prop : ,req.user.id
     const deleted = await Debate.deleteDebate(req.params.id);
-    if (!deleted) 
-      return res.status(404).json({ success: false, message: 'debate not found' });
-    res.status(200).json({ success: true, message: 'debate deleted' });
+    if (!deleted)
+      return res
+        .status(404)
+        .json({ success: false, message: "debate not found" });
+    res.status(200).json({ success: true, message: "debate deleted" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function registerUserToDebate(req, res, next) {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const result = await Debate.registerUserToDebate(id, userId);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function finishDebate(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { score_user1, score_user2 } = req.body;
+
+    const result = await Debate.finishDebate(id, {
+      score_user1,
+      score_user2,
+    });
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
@@ -69,4 +112,13 @@ async function getStats(req, res, next) {
   }
 }
 
-module.exports = { getDebates, getDebate, createDebate, updateDebate, deleteDebate, getStats };
+module.exports = {
+  getDebates,
+  getDebate,
+  createDebate,
+  updateDebate,
+  deleteDebate,
+  registerUserToDebate,
+  finishDebate,
+  getStats,
+};

@@ -47,7 +47,41 @@ async function getArguments(req, res, next) {
   }
 }
 
+async function getAllArguments(req, res, next) {
+  try {
+    const argumentsList = await ArgumentModel.getAllArguments();
+    res.status(200).json({ success: true, arguments: argumentsList });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deleteArgument(req, res, next) {
+  try {
+    const argumentId = req.params.argumentId;
+    const userId = req.user.id;
+
+    const result = await ArgumentModel.deleteArgument(argumentId, userId);
+
+    if (result === "not_found")
+      return res
+        .status(404)
+        .json({ success: false, message: "Argument not found" });
+
+    if (result === "unauthorized")
+      return res
+        .status(403)
+        .json({ success: false, message: "You can only delete your own arguments" });
+
+    res.status(200).json({ success: true, message: "Argument deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   createArgument,
   getArguments,
+  getAllArguments,
+  deleteArgument,
 };
