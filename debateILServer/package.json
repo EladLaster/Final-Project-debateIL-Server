@@ -1,12 +1,10 @@
 {
-  "name": "debateil-server",
+  "name": "recipes-project",
   "version": "1.0.0",
-  "main": "server.js",
-  "description": "DebateIL Server - Backend API for live debate platform",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "start": "node server.js",
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:migrate:undo": "npx sequelize-cli db:migrate:undo",
     "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
@@ -15,15 +13,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EladLaster/Final-Project-debateIL-Client.git"
+    "url": "git+https://github.com/EladLaster/Recipes-Project.git"
   },
-  "keywords": ["debate", "live", "discussion", "api", "nodejs", "express"],
-  "author": "DebateIL Team",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/EladLaster/Final-Project-debateIL-Client/issues"
+    "url": "https://github.com/EladLaster/Recipes-Project/issues"
   },
-  "homepage": "https://github.com/EladLaster/Final-Project-debateIL-Client#readme",
+  "homepage": "https://github.com/EladLaster/Recipes-Project#readme",
+  "description": "",
   "dependencies": {
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
