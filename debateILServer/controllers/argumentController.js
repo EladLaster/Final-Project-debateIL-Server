@@ -1,4 +1,4 @@
-const ArgumentModel = require('../models2/argumentModel');
+const ArgumentModel = require("../models2/argumentModel");
 
 async function createArgument(req, res, next) {
   try {
@@ -7,13 +7,22 @@ async function createArgument(req, res, next) {
     const { text } = req.body;
 
     // Check if user is a participant in this debate
-    const newArgument = await ArgumentModel.createArgument(debateId, userId, { text });
+    const newArgument = await ArgumentModel.createArgument(debateId, userId, {
+      text,
+    });
 
     if (!newArgument)
-      return res.status(404).json({ success: false, message: 'Debate not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Debate not found" });
 
-    if (newArgument === 'unauthorized')
-      return res.status(403).json({ success: false, message: 'Only debate participants can add arguments' });
+    if (newArgument === "unauthorized")
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Only debate participants can add arguments",
+        });
 
     res.status(201).json({ success: true, argument: newArgument });
   } catch (err) {
@@ -28,7 +37,9 @@ async function getArguments(req, res, next) {
     const argumentsList = await ArgumentModel.getArgumentsByDebate(debateId);
 
     if (argumentsList === null)
-      return res.status(404).json({ success: false, message: 'Debate not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Debate not found" });
 
     res.status(200).json({ success: true, arguments: argumentsList });
   } catch (err) {
@@ -38,5 +49,5 @@ async function getArguments(req, res, next) {
 
 module.exports = {
   createArgument,
-  getArguments
+  getArguments,
 };
