@@ -51,7 +51,7 @@ async function login(req, res, next) {
 
 async function register(req, res, next) {
   try {
-    const { username, email, password, firstName, lastName } = req.body;
+    const { username, email, password, firstName, lastName, gender } = req.body;
     if (!username || !email || !password || !firstName || !lastName)
       return res
         .status(400)
@@ -63,6 +63,7 @@ async function register(req, res, next) {
       password,
       firstName,
       lastName,
+      gender: gender || 'male', // Default to male if not provided
     });
     if (!result)
       return res

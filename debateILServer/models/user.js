@@ -19,7 +19,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: { type: DataTypes.STRING, allowNull: false },
     firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING
+    lastName: DataTypes.STRING,
+    gender: { 
+      type: DataTypes.ENUM('male', 'female'), 
+      allowNull: false, 
+      defaultValue: 'male' 
+    },
+    avatarUrl: { 
+      type: DataTypes.STRING, 
+      allowNull: true 
+    }
   }, {
     timestamps: true
   });

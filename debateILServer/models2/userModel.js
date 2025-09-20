@@ -4,6 +4,21 @@ const db = require('../models');
 const { User } = db;
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Generate avatar URL based on gender
+async function generateAvatarUrl(gender = 'male') {
+  try {
+    const genderParam = gender === 'female' ? 'female' : 'male';
+    const response = await fetch(`https://randomuser.me/api/?gender=${genderParam}`);
+    const data = await response.json();
+    return data.results[0].picture.medium;
+  } catch (error) {
+    // Fallback to gender-appropriate default avatar
+    const fallbackId = Math.floor(Math.random() * 100) + 1;
+    const fallbackGender = gender === 'female' ? 'women' : 'men';
+    return `https://randomuser.me/api/portraits/${fallbackGender}/${fallbackId}.jpg`;
+  }
+}
+
 async function  getAllUsers() {
   const users = await User.findAll();
   
@@ -29,24 +44,31 @@ async function loginUser(email, password) {
       username: user.username,
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
+      gender: user.gender,
+      avatarUrl: user.avatarUrl
     },
     token
   };
 }
 
-async function registerUser({ username, email, password, firstName, lastName }) {
+async function registerUser({ username, email, password, firstName, lastName, gender = 'male' }) {
   const existing = await User.findOne({ where: { email: email.toLowerCase() } });
   if (existing) return null;
 
   const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Generate avatar URL based on gender
+  const avatarUrl = await generateAvatarUrl(gender);
 
   const user = await User.create({
     username,
     email: email.toLowerCase(),
     password: hashedPassword,
     firstName,
-    lastName
+    lastName,
+    gender,
+    avatarUrl
   });
 
   const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
@@ -57,7 +79,9 @@ async function registerUser({ username, email, password, firstName, lastName }) 
       username: user.username,
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
+      gender: user.gender,
+      avatarUrl: user.avatarUrl
     },
     token
   };
@@ -72,7 +96,9 @@ async function profileUser(userId) {
     username: user.username,
     email: user.email,
     firstName: user.firstName,
-    lastName: user.lastName
+    lastName: user.lastName,
+    gender: user.gender,
+    avatarUrl: user.avatarUrl
   };
 }
 
