@@ -10,17 +10,38 @@ const checkRecipeOwnership = require("../middlewares/recipeOwnership");
 // send in prep: authMiddleware for all of the functions
 // send a prop : checkRecipeOwnership for put and delete
 
-
 // אם זה לא עובד תורידו את הauthmidleware!!!!!!
 debateRoute.get("/", authMiddleware, debateController.getDebates);
 debateRoute.get("/stats", debateController.getStats);
-debateRoute.get("/:id", debateController.getDebate);
 
+// Arguments routes (must come before /:id routes)
+debateRoute.get(
+  "/arguments",
+  authMiddleware,
+  argumentController.getAllArguments
+);
+debateRoute.delete(
+  "/arguments/:argumentId",
+  authMiddleware,
+  argumentController.deleteArgument
+);
+
+debateRoute.get("/:id", debateController.getDebate);
 debateRoute.post("/", validation, debateController.createDebate);
 debateRoute.put("/:id", debateController.updateDebate);
-debateRoute.delete("/:id", debateController.deleteDebate);
+debateRoute.delete("/:id", authMiddleware, debateController.deleteDebate);
+debateRoute.post(
+  "/:id/register",
+  authMiddleware,
+  debateController.registerUserToDebate
+);
+debateRoute.post("/:id/finish", authMiddleware, debateController.finishDebate);
 
-debateRoute.post("/:id/arguments", authMiddleware, argumentController.createArgument);
+debateRoute.post(
+  "/:id/arguments",
+  authMiddleware,
+  argumentController.createArgument
+);
 debateRoute.get("/:id/arguments", argumentController.getArguments);
 
 debateRoute.patch("/:id/vote/user1", voteController.voteUser1);

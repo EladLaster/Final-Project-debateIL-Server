@@ -9,5 +9,6 @@ userRoute.get("/:userId", userController.getUserById);
 userRoute.post("/register", userController.register);
 userRoute.post("/login", userController.login);
 userRoute.get("/profile", authMiddleware, userController.profile);
+userRoute.put("/profile", authMiddleware, userController.updateProfile);
 
 module.exports = userRoute;

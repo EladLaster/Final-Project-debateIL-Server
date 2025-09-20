@@ -49,7 +49,42 @@ async function getArgumentsByDebate(debateId) {
   return argumentsList.map((arg) => arg.toJSON());
 }
 
+async function getAllArguments() {
+  const argumentsList = await Argument.findAll({
+    include: [
+      {
+        model: db.User,
+        as: "author",
+        attributes: ["id", "firstName", "lastName", "email"],
+      },
+      {
+        model: db.Debate,
+        as: "debate",
+        attributes: ["id", "topic", "status"],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  });
+
+  return argumentsList.map((arg) => arg.toJSON());
+}
+
+async function deleteArgument(argumentId, userId) {
+  const argument = await Argument.findByPk(argumentId);
+  if (!argument) return "not_found";
+
+  // Check if user is the author of the argument
+  if (argument.user_id !== userId) {
+    return "unauthorized";
+  }
+
+  await argument.destroy();
+  return "success";
+}
+
 module.exports = {
   createArgument,
   getArgumentsByDebate,
+  getAllArguments,
+  deleteArgument,
 };
