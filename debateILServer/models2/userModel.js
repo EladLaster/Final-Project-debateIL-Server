@@ -114,7 +114,64 @@ async function profileUser(userId) {
     lastName: user.lastName,
     gender: user.gender,
     avatarUrl: user.avatarUrl,
+    createdAt: user.createdAt,
   };
 }
 
-module.exports = { getAllUsers, loginUser, registerUser, profileUser };
+async function updateUser(userId, updateData) {
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return { success: false, message: "User not found" };
+    }
+
+    // Check if email is being changed and if it's already taken
+    if (updateData.email && updateData.email !== user.email) {
+      const existingUser = await User.findOne({
+        where: { email: updateData.email },
+      });
+      if (existingUser) {
+        return { success: false, message: "Email already exists" };
+      }
+    }
+
+    // Check if username is being changed and if it's already taken
+    if (updateData.username && updateData.username !== user.username) {
+      const existingUser = await User.findOne({
+        where: { username: updateData.username },
+      });
+      if (existingUser) {
+        return { success: false, message: "Username already exists" };
+      }
+    }
+
+    // Update user data
+    await user.update(updateData);
+
+    return {
+      success: true,
+      message: "User updated successfully",
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        gender: user.gender,
+        avatarUrl: user.avatarUrl,
+        createdAt: user.createdAt,
+      },
+    };
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return { success: false, message: "Failed to update user" };
+  }
+}
+
+module.exports = {
+  getAllUsers,
+  loginUser,
+  registerUser,
+  profileUser,
+  updateUser,
+};

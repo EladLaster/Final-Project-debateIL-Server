@@ -111,4 +111,38 @@ async function getUserById(req, res, next) {
   }
 }
 
-module.exports = { getUsers, login, register, profile, getUserById };
+async function updateProfile(req, res, next) {
+  try {
+    const { firstName, lastName, email, username } = req.body;
+    const userId = req.user.id;
+
+    // Validate required fields
+    if (!firstName || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "First name and email are required"
+      });
+    }
+
+    const result = await Auth.updateUser(userId, {
+      firstName,
+      lastName,
+      email,
+      username
+    });
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      user: result.user
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { getUsers, login, register, profile, getUserById, updateProfile };
