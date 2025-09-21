@@ -42,7 +42,6 @@ async function login(req, res, next) {
       success: true,
       message: "Login successful",
       user: result.user,
-      token: result.token, // Send token in response
     });
   } catch (err) {
     next(err);
@@ -73,7 +72,7 @@ async function register(req, res, next) {
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      ...result,
+      user: result.user,
     });
   } catch (err) {
     next(err);
