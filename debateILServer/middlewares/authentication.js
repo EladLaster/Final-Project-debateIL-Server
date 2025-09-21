@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function authMiddleware(req, res, next) {
-  // Get token from cookies only
+  try {
   const token = req.cookies?.token;
 
   if (!token)
@@ -10,14 +10,7 @@ function authMiddleware(req, res, next) {
       .status(401)
       .json({ success: false, message: "No authentication cookie provided" });
 
-  try {
     const decoded = jwt.verify(token, JWT_SECRET);
-
-    if (!decoded.id)
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid token payload" });
-
     req.user = decoded;
     next();
   } catch (error) {

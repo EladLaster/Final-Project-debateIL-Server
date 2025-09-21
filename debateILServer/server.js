@@ -1,35 +1,33 @@
 require("dotenv").config();
-const cors = require("cors");
 const express = require("express");
-const morgan = require("morgan");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const { errorHandling } = require("./middlewares/errorHandling");
+const morgan = require("morgan");
 const debateRoute = require("./routes/debateRoute");
 const userRoute = require("./routes/userRoute");
-const app = express();
+const { errorHandling } = require("./middlewares/errorHandling");
 
+const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
+      // "http://localhost:5174",
+      // "http://localhost:5175",
       "https://final-project-debateil-client.onrender.com",
     ],
     credentials: true,
   })
 );
-app.use(cookieParser());
 
 morgan.token("date", () => new Date().toISOString());
 app.use(morgan(":method :url :status :response-time ms - :date"));
 
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
+app.get("/", (req, res) => {res.send("Server is running!");});
 app.use("/auth", userRoute);
 app.use("/api/users", userRoute);
 app.use("/api/debates", debateRoute);

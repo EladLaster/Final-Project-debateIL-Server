@@ -33,9 +33,10 @@ async function login(req, res, next) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: true, // Required for sameSite: "none"
-      sameSite: "none", // Required for cross-origin requests
-      maxAge: 24 * 60 * 60 * 1000, // 24h
+      sameSite: "None", // Required for cross-origin requests
       path: "/",
+      domain: "final-project-debateil-client.onrender.com",
+      maxAge: 24 * 60 * 60 * 1000 // 24h
     });
 
     res.status(200).json({
@@ -73,9 +74,10 @@ async function register(req, res, next) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: true, // Required for sameSite: "none"
-      sameSite: "none", // Required for cross-origin requests
-      maxAge: 24 * 60 * 60 * 1000, // 24h
+      sameSite: "None", // Required for cross-origin requests
       path: "/",
+      domain: "final-project-debateil-client.onrender.com",
+      maxAge: 24 * 60 * 60 * 1000 // 24h
     });
 
     res.status(201).json({
