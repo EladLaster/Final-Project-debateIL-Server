@@ -33,9 +33,11 @@ async function login(req, res, next) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Only secure in production
-      sameSite: "lax", // Use lax for better mobile compatibility
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // None for cross-origin in production
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
+      domain:
+        process.env.NODE_ENV === "production" ? ".onrender.com" : undefined, // Set domain for cross-origin
     });
 
     res.status(200).json({
@@ -73,9 +75,11 @@ async function register(req, res, next) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Only secure in production
-      sameSite: "lax", // Use lax for better mobile compatibility
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // None for cross-origin in production
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
+      domain:
+        process.env.NODE_ENV === "production" ? ".onrender.com" : undefined, // Set domain for cross-origin
     });
 
     res.status(201).json({
