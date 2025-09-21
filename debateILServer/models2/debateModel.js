@@ -12,31 +12,28 @@ async function getAllDebates() {
   };
 
   //send a prop: { where: whereClause }
-  let debates = await Debate.findAll();
+  let debates = await Debate.findAll({
+    include: [
+      {
+        model: db.Argument,
+        as: "arguments",
+        attributes: ["id"], // Only get the id to count
+      },
+    ],
+  });
 
-  // if (difficulty) {
-  //   filteredRecipes = filteredRecipes.filter(
-  //     r => r.difficulty.toLowerCase() === difficulty.toLowerCase()
-  //   );
-  // }
+  // Add arguments count to each debate
+  const debatesWithCounts = debates.map((debate) => {
+    const debateData = debate.toJSON();
+    debateData.arguments_count = debateData.arguments
+      ? debateData.arguments.length
+      : 0;
+    // Remove the arguments array to keep response clean
+    delete debateData.arguments;
+    return debateData;
+  });
 
-  // if (maxCookingTime) {
-  //   const maxTime = parseInt(maxCookingTime, 10);
-  //   if (!isNaN(maxTime)) {
-  //     filteredRecipes = filteredRecipes.filter(r => r.cookingTime <= maxTime);
-  //   }
-  // }
-
-  // if (search) {
-  //   const searchLower = search.toLowerCase();
-  //   filteredRecipes = filteredRecipes.filter(
-  //     r =>
-  //       r.title.toLowerCase().includes(searchLower) ||
-  //       r.description.toLowerCase().includes(searchLower)
-  //   );
-  // }
-
-  return debates;
+  return debatesWithCounts;
 }
 
 async function getDebateById(id) {
