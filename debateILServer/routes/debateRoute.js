@@ -1,6 +1,13 @@
 const express = require("express");
 const debateRoute = express.Router();
-const { validation, validationPut } = require("../middlewares/validation");
+const {
+  validation,
+  validationPut,
+  validateDebateCreate,
+  validateDebateUpdate,
+  validateArgumentCreate,
+  validateVoteCreate,
+} = require("../middlewares/validation");
 const debateController = require("../controllers/debateController");
 const argumentController = require("../controllers/argumentController");
 const voteController = require("../controllers/voteController");
@@ -27,8 +34,8 @@ debateRoute.delete(
 );
 
 debateRoute.get("/:id", debateController.getDebate);
-debateRoute.post("/", validation, debateController.createDebate);
-debateRoute.put("/:id", debateController.updateDebate);
+debateRoute.post("/", validateDebateCreate, debateController.createDebate);
+debateRoute.put("/:id", validateDebateUpdate, debateController.updateDebate);
 debateRoute.delete("/:id", authMiddleware, debateController.deleteDebate);
 debateRoute.post(
   "/:id/register",
@@ -40,6 +47,7 @@ debateRoute.post("/:id/finish", authMiddleware, debateController.finishDebate);
 debateRoute.post(
   "/:id/arguments",
   authMiddleware,
+  validateArgumentCreate,
   argumentController.createArgument
 );
 debateRoute.get("/:id/arguments", argumentController.getArguments);

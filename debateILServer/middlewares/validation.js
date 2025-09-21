@@ -1,40 +1,92 @@
-const Ajv = require('ajv');
-const addFormats = require('ajv-formats');
-const debateSchema = require('../schemas/debateSchema');
+const Ajv = require("ajv");
+const addFormats = require("ajv-formats");
+const {
+  debateSchema,
+  debateCreateSchema,
+  debateUpdateSchema,
+} = require("../schemas/debateSchema");
+const {
+  userSchema,
+  userLoginSchema,
+  userUpdateSchema,
+} = require("../schemas/userSchema");
+const {
+  argumentSchema,
+  argumentCreateSchema,
+} = require("../schemas/argumentSchema");
+const { voteSchema, voteCreateSchema } = require("../schemas/voteSchema");
 
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 
-const validatefunc = ajv.compile(debateSchema)
-const partialSchema = { ...debateSchema, required: [] };
-const validatefuncPut = ajv.compile(partialSchema);
+// Debate validators
+const validateDebate = ajv.compile(debateSchema);
+const validateDebateCreate = ajv.compile(debateCreateSchema);
+const validateDebateUpdate = ajv.compile(debateUpdateSchema);
 
+// User validators
+const validateUser = ajv.compile(userSchema);
+const validateUserLogin = ajv.compile(userLoginSchema);
+const validateUserUpdate = ajv.compile(userUpdateSchema);
 
-function validation(req,res,next){
+// Argument validators
+const validateArgument = ajv.compile(argumentSchema);
+const validateArgumentCreate = ajv.compile(argumentCreateSchema);
 
-    const valid = validatefunc(req.body);
-    if(valid)
-        return next();
-    
-    const errors = validatefunc.errors || [];
-    
+// Vote validators
+const validateVote = ajv.compile(voteSchema);
+const validateVoteCreate = ajv.compile(voteCreateSchema);
+
+// Generic validation function
+function createValidation(validator) {
+  return (req, res, next) => {
+    const valid = validator(req.body);
+    if (valid) {
+      return next();
+    }
+
+    const errors = validator.errors || [];
+
     return res.status(400).json({
-        success: false,
-        errors: errors.map(e => `${e.params?.missingProperty || e.instancePath}: ${e.message}`)
+      success: false,
+      message: "Validation failed",
+      errors: errors.map((e) => ({
+        field:
+          e.params?.missingProperty ||
+          e.instancePath?.replace("/", "") ||
+          "unknown",
+        message: e.message,
+      })),
     });
+  };
 }
 
-function validationPut(req, res, next) {
-    const valid = validatefuncPut(req.body);
-    if(valid)
-        return next();
+// Specific validation functions
+const validateDebateCreateMiddleware = createValidation(validateDebateCreate);
+const validateDebateUpdateMiddleware = createValidation(validateDebateUpdate);
+const validateUserRegisterMiddleware = createValidation(validateUser);
+const validateUserLoginMiddleware = createValidation(validateUserLogin);
+const validateUserUpdateMiddleware = createValidation(validateUserUpdate);
+const validateArgumentCreateMiddleware = createValidation(
+  validateArgumentCreate
+);
+const validateVoteCreateMiddleware = createValidation(validateVoteCreate);
 
-    const errors = validatefuncPut.errors || [];
+// Legacy functions for backward compatibility
+const validation = validateDebateCreateMiddleware;
+const validationPut = validateDebateUpdateMiddleware;
 
-    return res.status(400).json({
-        success: false,
-        errors: errors.map(e => `${e.params.missingProperty || e.instancePath}: ${e.message}`)
-    });
-}
+module.exports = {
+  // Legacy exports
+  validation,
+  validationPut,
 
-module.exports = {validation,validationPut}
+  // New specific validators
+  validateDebateCreate: validateDebateCreateMiddleware,
+  validateDebateUpdate: validateDebateUpdateMiddleware,
+  validateUserRegister: validateUserRegisterMiddleware,
+  validateUserLogin: validateUserLoginMiddleware,
+  validateUserUpdate: validateUserUpdateMiddleware,
+  validateArgumentCreate: validateArgumentCreateMiddleware,
+  validateVoteCreate: validateVoteCreateMiddleware,
+};
