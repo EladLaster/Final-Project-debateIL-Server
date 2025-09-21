@@ -30,7 +30,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true 
     }
   }, {
-    timestamps: true
+    timestamps: true,
+    freezeTableName: true,
+    tableName: 'users'
   });
 
  User.associate = models => {
