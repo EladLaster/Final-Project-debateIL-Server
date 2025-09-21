@@ -17,7 +17,7 @@ const authMiddleware = require("../middlewares/authentication");
 // send a prop : checkRecipeOwnership for put and delete
 
 // אם זה לא עובד תורידו את הauthmidleware!!!!!!
-debateRoute.get("/", authMiddleware, debateController.getDebates);
+debateRoute.get("/", debateController.getDebates);
 debateRoute.get("/stats", debateController.getStats);
 
 // Arguments routes (must come before /:id routes)
