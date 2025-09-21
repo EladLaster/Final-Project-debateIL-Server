@@ -69,7 +69,23 @@ async function deleteDebate(req, res, next) {
 async function registerUserToDebate(req, res, next) {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    // Use userId from request body if provided, otherwise fallback to JWT user
+    const userId = req.body.userId || req.user.id;
+
+    console.log("Register User to Debate Debug:");
+    console.log("- Debate ID:", id);
+    console.log("- Request body userId:", req.body.userId);
+    console.log("- JWT user id:", req.user.id);
+    console.log("- Final userId used:", userId);
+
+    // Validate that the userId from request matches the authenticated user
+    if (req.body.userId && req.body.userId !== req.user.id) {
+      console.log("❌ Security violation: userId mismatch");
+      return res.status(403).json({
+        success: false,
+        message: "You can only register yourself for debates",
+      });
+    }
 
     const result = await Debate.registerUserToDebate(id, userId);
 
@@ -77,6 +93,7 @@ async function registerUserToDebate(req, res, next) {
       return res.status(400).json(result);
     }
 
+    console.log("✅ User registered successfully:", userId);
     res.status(200).json(result);
   } catch (err) {
     next(err);
