@@ -1,6 +1,6 @@
 const { getAllUsers } = require("../models2/userModel");
 const Auth = require("../models2/userModel");
-require('dotenv').config();
+require("dotenv").config();
 
 async function getUsers(req, res, next) {
   try {
@@ -42,12 +42,12 @@ async function login(req, res, next) {
       success: true,
       message: "Login successful",
       user: result.user,
+      token: result.token, // Send token in response
     });
   } catch (err) {
     next(err);
   }
 }
-
 
 async function register(req, res, next) {
   try {
@@ -63,20 +63,18 @@ async function register(req, res, next) {
       password,
       firstName,
       lastName,
-      gender: gender || 'male', // Default to male if not provided
+      gender: gender || "male", // Default to male if not provided
     });
     if (!result)
       return res
         .status(400)
         .json({ success: false, message: "Email already exists" });
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "User registered successfully",
-        ...result,
-      });
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully",
+      ...result,
+    });
   } catch (err) {
     next(err);
   }
@@ -120,7 +118,7 @@ async function updateProfile(req, res, next) {
     if (!firstName || !email) {
       return res.status(400).json({
         success: false,
-        message: "First name and email are required"
+        message: "First name and email are required",
       });
     }
 
@@ -128,7 +126,7 @@ async function updateProfile(req, res, next) {
       firstName,
       lastName,
       email,
-      username
+      username,
     });
 
     if (!result.success) {
@@ -138,11 +136,18 @@ async function updateProfile(req, res, next) {
     res.json({
       success: true,
       message: "Profile updated successfully",
-      user: result.user
+      user: result.user,
     });
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { getUsers, login, register, profile, getUserById, updateProfile };
+module.exports = {
+  getUsers,
+  login,
+  register,
+  profile,
+  getUserById,
+  updateProfile,
+};
