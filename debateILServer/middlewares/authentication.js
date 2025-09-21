@@ -8,7 +8,7 @@ function authMiddleware(req, res, next) {
   if (!token)
     return res
       .status(401)
-      .json({ success: false, message: "No Token provided" });
+      .json({ success: false, message: "No authentication cookie provided" });
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -21,9 +21,11 @@ function authMiddleware(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Invalid Token", error: error.message });
+    return res.status(401).json({
+      success: false,
+      message: "Invalid authentication cookie",
+      error: error.message,
+    });
   }
 }
 
