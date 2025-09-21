@@ -33,7 +33,7 @@ async function login(req, res, next) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Only secure in production
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Different sameSite for dev/prod
+      sameSite: "lax", // Use lax for better mobile compatibility
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
     });
@@ -68,6 +68,15 @@ async function register(req, res, next) {
       return res
         .status(400)
         .json({ success: false, message: "Email already exists" });
+
+    // Set cookie for registered user
+    res.cookie("token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: "lax", // Use lax for better mobile compatibility
+      maxAge: 24 * 60 * 60 * 1000, // 24h
+      path: "/",
+    });
 
     res.status(201).json({
       success: true,
