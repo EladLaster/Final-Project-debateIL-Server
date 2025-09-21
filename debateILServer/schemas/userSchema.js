@@ -15,8 +15,7 @@ const userSchema = {
     },
     password: {
       type: "string",
-      minLength: 8,
-      pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d@$!%*?&]{8,}$",
+      minLength: 4,
     },
     firstName: {
       type: "string",

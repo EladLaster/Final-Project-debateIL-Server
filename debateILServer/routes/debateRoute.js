@@ -17,8 +17,8 @@ const authMiddleware = require("../middlewares/authentication");
 // send a prop : checkRecipeOwnership for put and delete
 
 // אם זה לא עובד תורידו את הauthmidleware!!!!!!
-debateRoute.get("/", debateController.getDebates);
-debateRoute.get("/stats", debateController.getStats);
+debateRoute.get("/", authMiddleware, debateController.getDebates);
+debateRoute.get("/stats", authMiddleware, debateController.getStats);
 
 // Arguments routes (must come before /:id routes)
 debateRoute.get(
@@ -51,16 +51,8 @@ debateRoute.post(
 );
 debateRoute.get("/:id/arguments", argumentController.getArguments);
 
-debateRoute.patch(
-  "/:id/vote/user1",
-  validateVoteCreate,
-  voteController.voteUser1
-);
-debateRoute.patch(
-  "/:id/vote/user2",
-  validateVoteCreate,
-  voteController.voteUser2
-);
+debateRoute.patch("/:id/vote/user1", voteController.voteUser1);
+debateRoute.patch("/:id/vote/user2", voteController.voteUser2);
 debateRoute.get("/:id/votes", voteController.getVotes);
 
 module.exports = debateRoute;
