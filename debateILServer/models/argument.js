@@ -23,7 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    timestamps: true
+    timestamps: true,
+    freezeTableName: true,
+    tableName: "arguments",
   });
 
   Argument.associate = models => {
