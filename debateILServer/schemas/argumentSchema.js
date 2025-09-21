@@ -19,13 +19,13 @@ const argumentSchema = {
 const argumentCreateSchema = {
   type: "object",
   properties: {
-    content: {
+    text: {
       type: "string",
       minLength: 5,
       maxLength: 1000,
     },
   },
-  required: ["content"],
+  required: ["text"],
   additionalProperties: false,
 };
 

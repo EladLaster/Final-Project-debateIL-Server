@@ -33,6 +33,8 @@ const debateCreateSchema = {
   properties: {
     topic: { type: "string", minLength: 10, maxLength: 200 },
     start_time: { type: "string", format: "date-time" },
+    end_time: { type: ["string", "null"], format: "date-time" },
+    status: { type: "string", enum: ["scheduled", "live", "finished"] },
   },
   required: ["topic", "start_time"],
   additionalProperties: false,

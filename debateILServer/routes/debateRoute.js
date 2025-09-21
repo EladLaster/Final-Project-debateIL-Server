@@ -51,8 +51,16 @@ debateRoute.post(
 );
 debateRoute.get("/:id/arguments", argumentController.getArguments);
 
-debateRoute.patch("/:id/vote/user1", voteController.voteUser1);
-debateRoute.patch("/:id/vote/user2", voteController.voteUser2);
+debateRoute.patch(
+  "/:id/vote/user1",
+  validateVoteCreate,
+  voteController.voteUser1
+);
+debateRoute.patch(
+  "/:id/vote/user2",
+  validateVoteCreate,
+  voteController.voteUser2
+);
 debateRoute.get("/:id/votes", voteController.getVotes);
 
 module.exports = debateRoute;
