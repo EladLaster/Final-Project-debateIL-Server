@@ -12,7 +12,6 @@ const debateController = require("../controllers/debateController");
 const argumentController = require("../controllers/argumentController");
 const voteController = require("../controllers/voteController");
 const authMiddleware = require("../middlewares/authentication");
-const checkRecipeOwnership = require("../middlewares/recipeOwnership");
 
 // send in prep: authMiddleware for all of the functions
 // send a prop : checkRecipeOwnership for put and delete
