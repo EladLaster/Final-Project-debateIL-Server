@@ -16,20 +16,20 @@ app.use(
     origin: function (origin, callback) {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      
+
       const allowedOrigins = [
         "http://localhost:5173",
-        "http://localhost:5174", 
+        "http://localhost:5174",
         "http://localhost:5175",
-        "https://final-project-debateil-client.onrender.com"
+        "https://final-project-debateil-client.onrender.com",
       ];
-      
+
       // Check if origin is allowed or is from render.com
-      if (allowedOrigins.includes(origin) || origin.endsWith('.onrender.com')) {
+      if (allowedOrigins.includes(origin) || origin.endsWith(".onrender.com")) {
         return callback(null, true);
       }
-      
-      return callback(new Error('Not allowed by CORS'));
+
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
