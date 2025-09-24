@@ -16,9 +16,12 @@ const authMiddleware = require("../middlewares/authentication");
 // send in prep: authMiddleware for all of the functions
 // send a prop : checkRecipeOwnership for put and delete
 
-// Restore authentication middleware
+// Public endpoints (no authentication required)
+debateRoute.get("/public", debateController.getPublicDebates);
+debateRoute.get("/stats", debateController.getStats);
+
+// Authenticated endpoints
 debateRoute.get("/", authMiddleware, debateController.getDebates);
-debateRoute.get("/stats", authMiddleware, debateController.getStats);
 
 // Arguments routes (must come before /:id routes)
 debateRoute.get("/arguments", authMiddleware, argumentController.getAllArguments);
