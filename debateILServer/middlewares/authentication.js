@@ -2,10 +2,22 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function authMiddleware(req, res, next) {
-  // Get token from cookies only
-  const token = req.cookies?.token;
-  
+  // Get token from cookies or Authorization header
+  let token = req.cookies?.token;
+
+  // If no cookie token, try Authorization header
+  if (!token && req.headers.authorization) {
+    const authHeader = req.headers.authorization;
+    if (authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7);
+    }
+  }
+
   console.log("🔐 Auth middleware - Cookies received:", req.cookies);
+  console.log(
+    "🔐 Auth middleware - Authorization header:",
+    req.headers.authorization
+  );
   console.log("🔐 Auth middleware - Token:", token ? "Present" : "Missing");
 
   if (!token)
