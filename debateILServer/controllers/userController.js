@@ -49,6 +49,7 @@ async function login(req, res, next) {
       success: true,
       message: "Login successful",
       user: result.user,
+      token: result.token, // Send token in response as well
     });
   } catch (err) {
     next(err);
