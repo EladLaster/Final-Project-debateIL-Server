@@ -13,17 +13,29 @@ const PORT = process.env.PORT || 3030;
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-      "https://final-project-debateil-client.onrender.com",
-    ],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174", 
+        "http://localhost:5175",
+        "https://final-project-debateil-client.onrender.com",
+      ];
+
+      // Check if origin is allowed or is from render.com
+      if (allowedOrigins.includes(origin) || origin.endsWith(".onrender.com")) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
-      "Authorization",
+      "Authorization", 
       "Cookie",
       "Origin",
       "X-Requested-With",
