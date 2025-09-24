@@ -8,7 +8,7 @@ const debateRoute = require("./routes/debateRoute");
 const userRoute = require("./routes/userRoute");
 const app = express();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3030;
 
 app.use(express.json());
 app.use(
@@ -17,9 +17,12 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",
-      "https://final-project-debateil-client.onrender.com"
+      "https://final-project-debateil-client.onrender.com",
+      "https://*.onrender.com",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   })
 );
 app.use(cookieParser());
