@@ -30,13 +30,20 @@ async function login(req, res, next) {
       });
     }
 
-    res.cookie("token", result.token, {
+    const cookieOptions = {
       httpOnly: true,
       secure: true, // Always secure for Render
       sameSite: "none", // Required for cross-domain cookies on Render
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
-    });
+    };
+    
+    console.log("🍪 Setting cookie with options:", cookieOptions);
+    console.log("🍪 Token length:", result.token.length);
+    
+    res.cookie("token", result.token, cookieOptions);
+    
+    console.log("🍪 Cookie set successfully");
 
     res.status(200).json({
       success: true,

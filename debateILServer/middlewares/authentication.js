@@ -4,6 +4,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 function authMiddleware(req, res, next) {
   // Get token from cookies only
   const token = req.cookies?.token;
+  
+  console.log("🔐 Auth middleware - Cookies received:", req.cookies);
+  console.log("🔐 Auth middleware - Token:", token ? "Present" : "Missing");
 
   if (!token)
     return res
