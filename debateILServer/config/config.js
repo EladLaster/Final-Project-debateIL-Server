@@ -11,6 +11,12 @@ module.exports = {
   },
   production: {
     use_env_variable: 'DB_CONNECTION',
-    dialect: "postgres"
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
   }
 };
