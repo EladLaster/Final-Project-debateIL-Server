@@ -40,8 +40,6 @@ async function loginUser(email, password) {
     expiresIn: "24h",
   });
 
-  // console.log(JWT_SECRET);
-
   return {
     user: {
       id: user.id,
@@ -163,7 +161,6 @@ async function updateUser(userId, updateData) {
       },
     };
   } catch (error) {
-    console.error("Error updating user:", error);
     return { success: false, message: "Failed to update user" };
   }
 }

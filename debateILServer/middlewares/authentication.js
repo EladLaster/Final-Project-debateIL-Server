@@ -13,13 +13,6 @@ function authMiddleware(req, res, next) {
     }
   }
 
-  console.log("🔐 Auth middleware - Cookies received:", req.cookies);
-  console.log(
-    "🔐 Auth middleware - Authorization header:",
-    req.headers.authorization
-  );
-  console.log("🔐 Auth middleware - Token:", token ? "Present" : "Missing");
-
   if (!token)
     return res
       .status(401)
