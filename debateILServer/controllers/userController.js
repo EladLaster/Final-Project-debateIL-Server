@@ -32,8 +32,8 @@ async function login(req, res, next) {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: true, // Always secure for Render
-      sameSite: "none", // Required for cross-domain cookies on Render
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Flexible for mobile
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
     };
