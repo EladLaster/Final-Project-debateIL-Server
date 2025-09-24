@@ -24,7 +24,11 @@ debateRoute.get("/stats", debateController.getStats);
 debateRoute.get("/", authMiddleware, debateController.getDebates);
 
 // Arguments routes (must come before /:id routes)
-debateRoute.get("/arguments", authMiddleware, argumentController.getAllArguments);
+debateRoute.get(
+  "/arguments",
+  authMiddleware,
+  argumentController.getAllArguments
+);
 debateRoute.delete(
   "/arguments/:argumentId",
   authMiddleware,
