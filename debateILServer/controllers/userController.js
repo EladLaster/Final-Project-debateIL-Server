@@ -32,8 +32,8 @@ async function login(req, res, next) {
 
     res.cookie("token", result.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Only secure in production
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Different sameSite for dev/prod
+      secure: true, // Always secure for Render
+      sameSite: "none", // Required for cross-domain cookies on Render
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
     });
