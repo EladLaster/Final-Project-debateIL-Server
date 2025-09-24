@@ -19,7 +19,7 @@ app.use(
 
       const allowedOrigins = [
         "http://localhost:5173",
-        "http://localhost:5174", 
+        "http://localhost:5174",
         "http://localhost:5175",
         "https://final-project-debateil-client.onrender.com",
       ];
@@ -35,13 +35,15 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
-      "Authorization", 
+      "Authorization",
       "Cookie",
       "Origin",
       "X-Requested-With",
       "Accept",
+      "Access-Control-Allow-Credentials",
     ],
     exposedHeaders: ["Set-Cookie"],
+    optionsSuccessStatus: 200, // For legacy browser support
   })
 );
 app.use(cookieParser());
