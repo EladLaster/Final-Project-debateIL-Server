@@ -62,9 +62,8 @@ app.use("/api/debates", debateRoute);
 const clientDistPath = path.join(__dirname, "../../Final-Project-debateIL-Client/debateILClient/dist");
 app.use(express.static(clientDistPath));
 
-// SPA fallback - must come AFTER API routes
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
+// SPA fallback - must come AFTER API routes (Express 5: use regex, not "*")
+app.get(/^\/(?!api|auth).*/, (req, res) => {
   res.sendFile(path.join(clientDistPath, "index.html"));
 });
 
