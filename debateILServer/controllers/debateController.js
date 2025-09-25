@@ -30,6 +30,19 @@ async function getPublicDebates(req, res, next) {
   }
 }
 
+async function getPublicDebate(req, res, next) {
+  try {
+    const debate = await Debate.getDebateById(req.params.id);
+    if (!debate)
+      return res
+        .status(404)
+        .json({ success: false, message: "debate not found" });
+    res.status(200).json({ success: true, debate });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function getDebate(req, res, next) {
   try {
     const debate = await Debate.getDebateById(req.params.id);
@@ -147,6 +160,7 @@ async function getStats(req, res, next) {
 module.exports = {
   getDebates,
   getPublicDebates,
+  getPublicDebate,
   getDebate,
   createDebate,
   updateDebate,
