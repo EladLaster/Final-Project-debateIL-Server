@@ -58,7 +58,7 @@ async function getDebate(req, res, next) {
 
 async function createDebate(req, res, next) {
   try {
-    //send a prop : ,req.user.id
+    // Support duration (minutes): compute end_time if provided
     const newDebate = await Debate.createDebate(req.body);
     res.status(201).json({ success: true, newDebate });
   } catch (err) {
