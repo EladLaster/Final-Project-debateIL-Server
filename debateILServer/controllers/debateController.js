@@ -15,6 +15,21 @@ async function getDebates(req, res, next) {
   }
 }
 
+async function getPublicDebates(req, res, next) {
+  try {
+    // Get all debates without authentication
+    const debates = await Debate.getAllDebates();
+
+    if (!debates.length)
+      return res
+        .status(404)
+        .json({ success: false, message: "No debates found" });
+    res.status(200).json({ success: true, debates });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function getDebate(req, res, next) {
   try {
     const debate = await Debate.getDebateById(req.params.id);
@@ -131,6 +146,7 @@ async function getStats(req, res, next) {
 
 module.exports = {
   getDebates,
+  getPublicDebates,
   getDebate,
   createDebate,
   updateDebate,

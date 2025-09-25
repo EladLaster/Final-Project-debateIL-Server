@@ -30,19 +30,21 @@ async function login(req, res, next) {
       });
     }
 
-    res.cookie("token", result.token, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: true, // Required for sameSite: "none"
-      sameSite: "None", // Required for cross-origin requests
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Flexible for mobile
+      maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
-      domain: "final-project-debateil-client.onrender.com",
-      maxAge: 24 * 60 * 60 * 1000 // 24h
-    });
+    };
+
+    res.cookie("token", result.token, cookieOptions);
 
     res.status(200).json({
       success: true,
       message: "Login successful",
       user: result.user,
+      token: result.token, // Send token in response as well
     });
   } catch (err) {
     next(err);
