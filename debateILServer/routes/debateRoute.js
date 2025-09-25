@@ -43,4 +43,9 @@ debateRoute.patch("/:id/vote/user1",authMiddleware, voteController.voteUser1);
 debateRoute.patch("/:id/vote/user2",authMiddleware, voteController.voteUser2);
 debateRoute.get("/:id/votes",authMiddleware, voteController.getVotes);
 
+// Public voting endpoints (allow audience voting without auth)
+debateRoute.patch("/:id/vote/user1/public", voteController.voteUser1);
+debateRoute.patch("/:id/vote/user2/public", voteController.voteUser2);
+debateRoute.get("/:id/votes/public", voteController.getVotes);
+
 module.exports = debateRoute;
