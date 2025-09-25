@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const debateRoute = require("./routes/debateRoute");
 const userRoute = require("./routes/userRoute");
+const { errorHandling } = require("./middlewares/errorHandling");
 const app = express();
 
 const PORT = process.env.PORT || 3030;
