@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -57,15 +56,6 @@ app.get("/", (req, res) => {res.send("Server is running!");});
 app.use("/auth", userRoute);
 app.use("/api/users", userRoute);
 app.use("/api/debates", debateRoute);
-
-// Serve built client (SPA) and enable refresh on deep links
-const clientDistPath = path.join(__dirname, "../../Final-Project-debateIL-Client/debateILClient/dist");
-app.use(express.static(clientDistPath));
-
-// SPA fallback - must come AFTER API routes (Express 5: use regex, not "*")
-app.get(/^\/(?!api|auth).*/, (req, res) => {
-  res.sendFile(path.join(clientDistPath, "index.html"));
-});
 
 app.use(errorHandling);
 
