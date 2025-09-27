@@ -18,6 +18,7 @@ const authMiddleware = require("../middlewares/authentication");
 
 // Public endpoints (no authentication required)
 debateRoute.get("/public", debateController.getPublicDebates);
+debateRoute.get("/:id/public", debateController.getPublicDebate);
 debateRoute.get("/stats", debateController.getStats);
 
 // Authenticated endpoints
@@ -36,9 +37,15 @@ debateRoute.post("/:id/finish", authMiddleware, debateController.finishDebate);
 
 debateRoute.post("/:id/arguments",authMiddleware,validateArgumentCreate,argumentController.createArgument);
 debateRoute.get("/:id/arguments",authMiddleware, argumentController.getArguments);
+debateRoute.get("/:id/arguments/public", argumentController.getArguments);
 
 debateRoute.patch("/:id/vote/user1",authMiddleware, voteController.voteUser1);
 debateRoute.patch("/:id/vote/user2",authMiddleware, voteController.voteUser2);
 debateRoute.get("/:id/votes",authMiddleware, voteController.getVotes);
+
+// Public voting endpoints (allow audience voting without auth)
+debateRoute.patch("/:id/vote/user1/public", voteController.voteUser1);
+debateRoute.patch("/:id/vote/user2/public", voteController.voteUser2);
+debateRoute.get("/:id/votes/public", voteController.getVotes);
 
 module.exports = debateRoute;

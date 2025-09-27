@@ -46,9 +46,16 @@ async function getDebateById(id) {
 
 //send a prop: , userId
 async function createDebate(data) {
-  const newDebate = await Debate.create({
-    ...data,
-  });
+  // If duration is provided (in minutes), compute end_time
+  let payload = { ...data };
+  if (!payload.end_time && payload.start_time && payload.duration) {
+    const start = new Date(payload.start_time);
+    payload.end_time = new Date(start.getTime() + Number(payload.duration) * 60000);
+  }
+  // Remove duration from DB columns (not part of schema)
+  delete payload.duration;
+
+  const newDebate = await Debate.create(payload);
 
   if (!newDebate) {
     throw new Error("Failed to create recipe");
