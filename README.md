@@ -1,4 +1,4 @@
-# 🖥️ DebateIL - Server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Go to Client App](https://img.shields.io/badge/Go_to_Client-Frontend-brightgreen?style=for-the-badge)](https://github.com/EladLaster/Final-Project-debateIL-Client)
+# 🖥️ DebateIL - Server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Go to Client](https://img.shields.io/badge/Go_to_Client-Frontend-brightgreen?style=for-the-badge)](https://github.com/EladLaster/Final-Project-debateIL-Client)
 
 
 > **שרת API מתקדם** - Node.js + Express + Sequelize לניהול דיבייטים בזמן אמת
