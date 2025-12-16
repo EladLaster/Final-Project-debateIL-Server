@@ -30,8 +30,16 @@ async function getAllUsers() {
 }
 
 async function loginUser(email, password) {
-  const user = await User.findOne({ where: { email: email.toLowerCase() } });
-  if (!user) return null;
+  // Check if JWT_SECRET is set
+  if (!JWT_SECRET) {
+    throw new Error("Server configuration error: JWT_SECRET missing");
+  }
+
+  const normalizedEmail = email.toLowerCase().trim();
+  const user = await User.findOne({ where: { email: normalizedEmail } });
+  if (!user) {
+    return null;
+  }
 
   const passwordMatch = await bcrypt.compare(password, user.password);
   if (!passwordMatch) return null;
@@ -62,42 +70,53 @@ async function registerUser({
   lastName,
   gender = "male",
 }) {
-  const existing = await User.findOne({
-    where: { email: email.toLowerCase() },
-  });
-  if (existing) return null;
+  try {
+    const existing = await User.findOne({
+      where: { email: email.toLowerCase() },
+    });
+    if (existing) {
+      return null;
+    }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Generate avatar URL based on gender
-  const avatarUrl = await generateAvatarUrl(gender);
+    // Generate avatar URL based on gender
+    const avatarUrl = await generateAvatarUrl(gender);
 
-  const user = await User.create({
-    username,
-    email: email.toLowerCase(),
-    password: hashedPassword,
-    firstName,
-    lastName,
-    gender,
-    avatarUrl,
-  });
+    const user = await User.create({
+      username,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      firstName,
+      lastName,
+      gender,
+      avatarUrl,
+    });
 
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-    expiresIn: "24h",
-  });
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "24h",
+    });
 
-  return {
-    user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      gender: user.gender,
-      avatarUrl: user.avatarUrl,
-    },
-    token,
-  };
+    return {
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        gender: user.gender,
+        avatarUrl: user.avatarUrl,
+      },
+      token,
+    };
+  } catch (error) {
+    // Handle unique constraint errors (username or email already exists)
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return null; // Return null to indicate user already exists
+    }
+
+    throw error; // Re-throw other errors to be handled by controller
+  }
 }
 
 async function profileUser(userId) {

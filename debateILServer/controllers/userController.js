@@ -1,5 +1,7 @@
 const { getAllUsers } = require("../models2/userModel");
 const Auth = require("../models2/userModel");
+const db = require("../models");
+const { User } = db;
 require("dotenv").config();
 
 async function getUsers(req, res, next) {
@@ -36,6 +38,9 @@ async function login(req, res, next) {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Flexible for mobile
       maxAge: 24 * 60 * 60 * 1000, // 24h
       path: "/",
+      ...(process.env.NODE_ENV === "production" && {
+        domain: "final-project-debateil-client.onrender.com",
+      }),
     };
 
     res.cookie("token", result.token, cookieOptions);
@@ -67,10 +72,19 @@ async function register(req, res, next) {
       lastName,
       gender: gender || "male", // Default to male if not provided
     });
-    if (!result)
-      return res
-        .status(400)
-        .json({ success: false, message: "Email already exists" });
+    if (!result) {
+      // Check if username or email exists to provide better error message
+      const existingEmail = await User.findOne({ where: { email: email.toLowerCase() } });
+      const existingUsername = await User.findOne({ where: { username } });
+      
+      if (existingEmail) {
+        return res.status(400).json({ success: false, message: "Email already exists" });
+      }
+      if (existingUsername) {
+        return res.status(400).json({ success: false, message: "Username already exists" });
+      }
+      return res.status(400).json({ success: false, message: "Registration failed" });
+    }
 
     // Set cookie for registered user
     res.cookie("token", result.token, {
@@ -78,8 +92,11 @@ async function register(req, res, next) {
       secure: true, // Required for sameSite: "none"
       sameSite: "None", // Required for cross-origin requests
       path: "/",
-      domain: "final-project-debateil-client.onrender.com",
-      maxAge: 24 * 60 * 60 * 1000 // 24h
+      // domain: "final-project-debateil-client.onrender.com",
+      maxAge: 24 * 60 * 60 * 1000, // 24h
+      ...(process.env.NODE_ENV === "production" && {
+        domain: "final-project-debateil-client.onrender.com",
+      }),
     });
 
     res.status(201).json({
